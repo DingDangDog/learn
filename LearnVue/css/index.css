@@ -1,0 +1,33 @@
+#container{
+	width: 80%;
+	height: 500px;
+	border: 1px solid red;
+	padding: 10px;
+}
+#flyWin{
+	position: fixed;
+	left: 90%;
+	margin: 0.625rem;
+}
+h3{
+	color:royalblue;
+}
+.center{
+	margin: auto;
+}
+input{
+	height: 30px;
+	width: 200px;
+	margin: 5px;
+	padding: 3px;
+	font-size: 18px;
+}
+input[type="text"]{
+	border: 1px solid burlywood;
+}
+.selected{
+	color: #FF0000;
+}
+li{
+	width: auto;
+}

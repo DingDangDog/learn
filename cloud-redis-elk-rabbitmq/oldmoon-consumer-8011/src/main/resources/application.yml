@@ -1,0 +1,20 @@
+server:
+  port: 8011
+
+spring:
+  application:
+    name: consumer-8011
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/ #eureka的服务地址，可以用','隔开多个地址
+  instance:
+    instance-id: consumer-8001 #eureka中显示的名称
+    prefer-ip-address: true #显示ip
+
+info: #服务信息，可在eureka中显示
+  app.name: consumer-8001
+  company.name: oldmoon.top
+  build.artifactId: oldmoon-consumer-8001
+  build.version: 1.0-SNAPSHOT

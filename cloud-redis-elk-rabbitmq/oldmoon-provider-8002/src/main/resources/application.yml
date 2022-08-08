@@ -1,0 +1,35 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: provider-test
+  redis:
+    database: 0 # Redis数据库索引（默认为0）
+    host: localhost  #Redis服务器地址
+    port: 6379 # Redis服务器连接端口
+    password: # Redis服务器连接密码（默认为空）
+    pool:
+      max-active: 20 # 连接池最大连接数（使用负值表示没有限制）
+      max-idle: 10 # 连接池中的最大空闲连接
+      max-wait: 1000 # 连接池最大阻塞等待时间（使用负值表示没有限制）
+      min-idle: 5 # 连接池中的最小空闲连接
+      timeout: 5000 # 连接超时时间（毫秒）
+  elasticsearch:
+    rest:
+      uris: localhost:9200
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/ #eureka的服务地址，可以用','隔开多个地址
+  instance:
+    instance-id: provider-8002 #eureka中显示的名称
+    prefer-ip-address: true #显示ip
+
+info: #服务信息，可在eureka中显示
+  app.name: provider-8002
+  company.name: oldmoon.top
+  build.artifactId: oldmoon-provider-8002
+  build.version: 1.0-SNAPSHOT
+

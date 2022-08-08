@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+
+	<link rel="icon" href="img/logo.png" />
+	<title>LearnVue</title>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<div id="container" class="center">
+		<div id="flyWin">
+			<a href="https://github.com/HuU-programmer/LearnVue/blob/master/index.html">看源码</a>
+		</div>
+
+		<div id="app">
+			<h3>Vue技术： v-on:mouseover | v-on:mouseout | v-model —— 实现用户输入数据处理和鼠标移入移出事件</h3>
+			<input v-on:mouseover="m_over" v-on:mouseout="m_out" id="test1" class="" type="text" v-model="message" />
+			<span>{{message}}</span>
+		</div>
+		<hr />
+		
+		<div id="app1">
+			<h3>Vue技术： v-if | @click —— 实现鼠标点击动态显示与隐藏标签</h3>
+			<ul>
+				<li v-if="isactive==0">箱包</li>
+
+				<button @click="hide" v-if="isactive==0">{{message}}</button>
+				<button @click="show" v-if="isactive==1">{{message}}</button>
+			</ul>
+		</div>
+		<hr/>
+		
+		<div id="app2">
+			<h3>Vue技术： v-for | @mouseover | @mouseout —— 在列表组件中循环数组，并实现鼠标移入变色效果</h3>
+			<ol>
+				<li v-for="(sort,index) in sorts" v-bind:class="{selected:index==select}" @mouseover="mouse_over(index)" @mouseout="mouse_out">
+					{{sort}}
+				</li>
+			</ol>
+		</div>
+		<hr/>
+		
+	</div>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>
