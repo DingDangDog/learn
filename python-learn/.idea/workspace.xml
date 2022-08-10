@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="20b0fb98-e6ac-46c0-bb71-50f3f52b1ae1" name="Default Changelist" comment="测试随机数攻击">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codes/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/codes/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codes/guessNum.py" beforeDir="false" afterPath="$PROJECT_DIR$/codes/guessNum.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codes/myMath.py" beforeDir="false" afterPath="$PROJECT_DIR$/codes/myMath.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codes/randoms/testRandom.py" beforeDir="false" afterPath="$PROJECT_DIR$/codes/randoms/testRandom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="20b0fb98-e6ac-46c0-bb71-50f3f52b1ae1" name="Default Changelist" comment="猜数字游戏优化" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -161,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660118393135</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="猜数字游戏优化">
+      <created>1660119163152</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1660119163152</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,6 +182,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <MESSAGE value="测试随机数攻击" />
-    <option name="LAST_COMMIT_MESSAGE" value="测试随机数攻击" />
+    <MESSAGE value="猜数字游戏优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="猜数字游戏优化" />
   </component>
 </project>
