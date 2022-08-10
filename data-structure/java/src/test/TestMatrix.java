@@ -2,6 +2,12 @@ package test;
 
 import utils.Matrix;
 
+/**
+ * 自建矩阵类测试类
+ *
+ * @author DingDangDog
+ * @since 2022/8/10 15:11
+ */
 public class TestMatrix {
     public static void main(String[] args) {
         Matrix<Integer> intMatrix = new Matrix<>(new Integer[2][3], 2, 3);
