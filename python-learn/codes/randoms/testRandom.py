@@ -1,5 +1,6 @@
 import random
 
+
 def init():
     state = random.getstate()
     print("生成第一次随机数")
@@ -15,6 +16,7 @@ def init():
     print(random.randint(0, 10))
     print(random.randint(0, 10))
     print(random.randint(0, 10))
+
 
 if __name__ == '__main__':
     init()
