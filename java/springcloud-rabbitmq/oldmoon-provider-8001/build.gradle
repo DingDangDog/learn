@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+description('data-structure')
+
+dependencies {
+    compile project(":oldmoon-api")
+
+    compile "org.springframework.boot:spring-boot-configuration-processor",
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-data-redis',
+            'org.springframework.boot:spring-boot-starter-actuator',
+            'org.springframework.cloud:spring-cloud-starter-feign',
+            'org.springframework.cloud:spring-cloud-starter-eureka',
+            'org.springframework.cloud:spring-cloud-starter-config',
+            'redis.clients:jedis',
+            'org.elasticsearch:elasticsearch',
+            'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.8.5'
+
+}

@@ -1,0 +1,77 @@
+buildscript {
+    ext {
+        springBootVersion = '2.4.1'
+    }
+    repositories {
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+plugins {
+    id "net.ltgt.apt" version "0.21"
+}
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io.github.dingdangdog'
+
+repositories {
+    mavenLocal()
+    maven { url "https://maven.aliyun.com/repository/public" }
+    mavenCentral()
+}
+
+subprojects {
+    buildscript {
+        ext {
+            springBootVersion = '2.4.1'
+        }
+        repositories {
+            maven { url "https://maven.aliyun.com/repository/public" }
+        }
+        dependencies {
+            classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = "io.github.dingdangdog"
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        maven { url "https://maven.aliyun.com/repository/public" }
+        mavenCentral()
+    }
+
+    ext {
+        // 默认继承依赖版本
+        lombokVersion = "1.18.8"
+        slf4jVersion = "1.7.30"
+        lang3Version = "3.8.1"
+        fastjsonVersion = "1.2.9"
+        // 可能引用依赖版本
+        druidVersion = "1.1.10"
+        mybatisVersion = "1.3.2"
+    }
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter-web',
+                "org.projectlombok:lombok:${lombokVersion}",
+                "org.slf4j:slf4j-api:${slf4jVersion}",
+                "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+                "org.apache.commons:commons-lang3:${lang3Version}",
+                "com.alibaba:fastjson:${fastjsonVersion}"
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    }
+}

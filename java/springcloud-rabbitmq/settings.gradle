@@ -1,0 +1,8 @@
+rootProject.name = 'springcloud-rabbitmq'
+
+include 'oldmoon-api'
+include 'oldmoon-consumer-8011'
+include 'oldmoon-eureka-7001'
+include 'oldmoon-provider-8001'
+include 'oldmoon-provider-8002'
+include 'oldmoon-zuul-9704'

@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+description('data-structure')
+
+dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+}

@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+description('data-structure')
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-configuration-processor:2.4.1",
+            'org.springframework.boot:spring-boot-starter-web:2.4.1',
+            'org.springframework.boot:spring-boot-starter-data-redis:2.4.1',
+            'redis.clients:jedis:2.4.1',
+            'org.elasticsearch:elasticsearch',
+            'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.8.5'
+
+}

@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+description('data-structure')
+
+dependencies {
+}

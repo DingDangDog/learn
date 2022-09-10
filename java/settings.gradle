@@ -1,0 +1,10 @@
+rootProject.name = 'java'
+include 'springcloud-rabbitmq'
+include 'data-structure'
+
+include 'springcloud-rabbitmq.oldmoon-api'
+include 'springcloud-rabbitmq.oldmoon-consumer-8011'
+include 'springcloud-rabbitmq.oldmoon-eureka-7001'
+include 'springcloud-rabbitmq.oldmoon-provider-8001'
+include 'springcloud-rabbitmq.oldmoon-provider-8002'
+include 'springcloud-rabbitmq.oldmoon-zuul-9704'
