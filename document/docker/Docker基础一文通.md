@@ -33,7 +33,7 @@
 >
 > 提示，如果想靠着一篇文章就精通Docker，那是不可能的。
 > 
-> [Github原文](https://github.com/DingDangDog/learn/tree/main/document/docker/Docker基础一文通.md)（`欢迎Stars`😘）
+> [Github原文](https://github.com/DingDangDog/learn/blob/main/document/docker/Docker基础一文通.md)（`欢迎Stars`😘）
 
 
 <!-- more -->
