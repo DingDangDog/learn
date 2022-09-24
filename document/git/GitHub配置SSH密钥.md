@@ -9,7 +9,7 @@
 1. 了解Windows环境下`git bash`的基本使用。
 2. 已经拥有`GitHub`帐号，并可以登录。
 
-
+[Github原文](https://github.com/DingDangDog/learn/blob/main/document/git/GitHub%E9%85%8D%E7%BD%AESSH%E5%AF%86%E9%92%A5.md)（`欢迎Stars`😘）
 
 ### <a name="keygen">生成SSH密钥</a>
 
