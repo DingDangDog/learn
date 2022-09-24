@@ -73,16 +73,16 @@ kasmweb/nginx                      An Nginx image based off nginx:alpine and in�
 ```
 
 - 命令解析：
-  - docker：固定开头，之后将不作说明
-  - search：从镜像仓库中搜索镜像，默认的仓库地址是官方的`https://hub.docker.com/`
-  - --limit 5：根据镜像STARS从多到少排序，查出前5个
-  - nginx：搜索镜像名字为`nginx`的镜像
+  - `docker`：固定开头，之后将不作说明
+  - `search`：从镜像仓库中搜索镜像，默认的仓库地址是官方的`https://hub.docker.com/`
+  - `--limit 5`：根据镜像STARS从多到少排序，查出前5个
+  - `nginx`：搜索镜像名字为`nginx`的镜像
 - 输出介绍：
-  - NAME：镜像名称
-  - DESCRIPTION：镜像描述
-  - STARS：点赞数
-  - OFFICIAL：官方认证
-  - AUTOMATED：自动化
+  - `NAME`：镜像名称
+  - `DESCRIPTION`：镜像描述
+  - `STARS`：点赞数
+  - `OFFICIAL`：官方认证
+  - `AUTOMATED`：自动化
 
 ##### pull
 
@@ -106,8 +106,8 @@ docker.io/library/nginx:latest
 ```
 
 - 命令解析：
-  - pull：从镜像仓库中拉取镜像到本地
-  - nginx：拉取镜像名为`nginx`的镜像，注意：不加版本号默认拉取版本号为`latest`的镜像，等同于加版本号的`nginx:latest`
+  - `pull`：从镜像仓库中拉取镜像到本地
+  - `nginx`：拉取镜像名为`nginx`的镜像，注意：不加版本号默认拉取版本号为`latest`的镜像，等同于加版本号的`nginx:latest`
 
 ##### images
 
@@ -125,14 +125,14 @@ hello-world        latest    feb5d9fea6a5   12 months ago   13.3kB
 ```
 
 - 命令解析
-  - images：查看本地已有的Docker镜像
-  - -a：查看所有
+  - `images`：查看本地已有的Docker镜像
+  - `-a`：查看所有
 - 输出介绍：
-  - REPOSITORY：镜像名称，有些人也叫其为仓库
-  - TAG：版本号
-  - IMAGE ID：镜像唯一ID
-  - CREATED：镜像构建时间
-  - SIZE：镜像文件大小
+  - `REPOSITORY`：镜像名称，有些人也叫其为仓库
+  - `TAG`：版本号
+  - `IMAGE ID`：镜像唯一ID
+  - `CREATED`：镜像构建时间
+  - `SIZE`：镜像文件大小
 - 拓展：`docker images -qa`：查看本地所有镜像的`IMAGE ID`
 
 ##### run：基础版
@@ -147,8 +147,8 @@ b88611a9e606371157f715acebc1441547fc8aed0a7f61888104136da58c523d
 ```
 
 - 命令解析
-  - run：运行docker镜像
-  - -d：后台运行
+  - `run`：运行docker镜像
+  - `-d`：后台运行
 
 - 输出介绍：输出的是生成的Docker容器的ID全量
 
@@ -167,16 +167,16 @@ b88611a9e606   nginx                     "/docker-entrypoint.…"   17 minutes a
 ```
 
 - 命令解析：
-  - ps：查看docker容器
-  - -a：查看全部容器，包括已经停止的。
+  - `ps`：查看docker容器
+  - `-a`：查看全部容器，包括已经停止的。
 - 输出介绍：
-  - CONTAINER ID：容器ID
-  - IMAGE：运行容器所用的镜像名称
-  - COMMAND：最终执行命令
-  - CREATED：创建时间
-  - STATUS：容器当前状态
-  - PORTS：容器端口使用情况
-  - NAMES：容器名称
+  - `CONTAINER ID`：容器ID
+  - `IMAGE`：运行容器所用的镜像名称
+  - `COMMAND`：最终执行命令
+  - `CREATED`：创建时间
+  - `STATUS`：容器当前状态
+  - `PORTS`：容器端口使用情况
+  - `NAMES`：容器名称
 
 ##### logs
 
@@ -204,10 +204,10 @@ docker logs -n 50 -f b88611a9e606
 ```
 
 - 命令解析
-  - logs：查看docker容器日志
-  - -n 50：最后50行
-  - -f：查找
-  - b88611a9e606：指定的的容器ID（CONTAINER ID），此处也可以使用容器名称（NAMES）
+  - `logs`：查看docker容器日志
+  - `-n 50`：最后50行
+  - `-f`：查找
+  - `b88611a9e606`：指定的的容器ID（`CONTAINER ID`），此处也可以使用容器名称（`NAMES`）
 
 - 输出说明：输出指定容器的日志，此处即为Nginx容器的日志
 
@@ -220,10 +220,10 @@ docker exec -it b88611a9e606 /bin/bash
 ```
 
 - 命令解析
-  - exec：进入容器
-  - -it：以终端模式
-  - b88611a9e606：容器ID（CONTAINER ID），也可以使用容器名称（NAMES）
-  - /bin/bash：运行bash命令行，亦可简化为`bash`
+  - `exec`：进入容器
+  - `-it`：以终端模式
+  - `b88611a9e606`：容器ID（CONTAINER ID），也可以使用容器名称（NAMES）
+  - `/bin/bash`：运行bash命令行，亦可简化为`bash`
 
 - 拓展：使用以上`exec`命令后，即进入容器内部，一般可以运行简单的`shell`命令，如`ls`、`cd`等，这取决于当前容器拥有的功能，使用`exit`即可退出当前容器。此处应该可以体会到一些开头说的概念：``镜像类似于迷你版的linux``。
 
@@ -238,9 +238,9 @@ docker exec -it b88611a9e606 /bin/bash
 ```
 
 - 命令解析：
-  - cp：拷贝文件
-  - 参数1：源文件（夹）
-  - 参数2：目的文件（夹）
+  - `cp`：拷贝文件
+  - `参数1`：源文件（夹）
+  - `参数2`：目的文件（夹）
 - 拓展：此命令实际场景用的不多，因为一遍都会配置本地与容器的文件映射，不需要手动拷贝，但仍有必要了解有此命令。
 
 
@@ -298,10 +298,10 @@ docker run -p 8080:80 --name nginx -v /etc/nginx/nginx.conf:/usr/local/nginx/ngi
 ```
 
 - 参数说明
-  - -p 8080:80：将本机8080端口映射到容器的80端口
-  - --name nginx：将启动的容器起名字叫`nginx`
-  - -v [参数1]:[参数2]：将容器内`参数1`的文件（夹）与本机的`参数2`的文件（夹）绑定
-  - -d：后台启动
+  - `-p 8080:80`：将本机8080端口映射到容器的80端口
+  - `--name nginx`：将启动的容器起名字叫`nginx`
+  - `-v [参数1]:[参数2]`：将容器内`参数1`的文件（夹）与本机的`参数2`的文件（夹）绑定
+  - `-d`：后台启动
 - 访问端口验证
 
 ![image-20220923221549221](./images/1663942509104.jpg)
