@@ -1,7 +1,5 @@
 package top.oldmoon.utils.elasticsearch;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -26,6 +24,7 @@ import top.oldmoon.annotation.ElasticSIndex;
 import top.oldmoon.constant.SearchRuleEnum;
 import top.oldmoon.entity.ElasticSCriteria;
 import top.oldmoon.entity.base.QueryElastic;
+import top.oldmoon.utils.JackJsonUtils;
 import top.oldmoon.utils.RedisUtils;
 
 import java.io.IOException;
@@ -35,8 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @description ElasticSearch 操作工具类简单封装
  * @author oldmoon
+ * @description ElasticSearch 操作工具类简单封装
  */
 //@Component
 public class ElasticSUtils {
@@ -46,12 +45,12 @@ public class ElasticSUtils {
     RestHighLevelClient elacticSClient;
 
     /**
-     * @description 保存数据到Elasticsearch
-     * @param type   数据类型
-     * @param index  索引（表名）
-     * @param sourceJson  数据——json字符串
+     * @param type       数据类型
+     * @param index      索引（表名）
+     * @param sourceJson 数据——json字符串
      * @return boolean  保存成功为true，失败为false
      * @throws IOException
+     * @description 保存数据到Elasticsearch
      */
     public boolean insert(String type, String index, String sourceJson) throws IOException {
 
@@ -64,8 +63,9 @@ public class ElasticSUtils {
         IndexResponse response = elacticSClient.index(request, RequestOptions.DEFAULT);
 
         // 判断响应结果，没有id视为失败，返回false
-        if (StringUtils.isEmpty(response.getId()))
+        if (StringUtils.isEmpty(response.getId())) {
             return false;
+        }
 
         return true;
     }
@@ -77,7 +77,7 @@ public class ElasticSUtils {
         String type = elasticSIndex.type(); // 获取类型
 
         // 实体类转json串
-        String jsonString = JSON.toJSONString(object);
+        String jsonString = JackJsonUtils.toJSONString(object);
         // 创建请求对象
         IndexRequest request = new IndexRequest(index);
         // request.opType(type);// INDEX(0), CREATE(1), UPDATE(2), DELETE(3);
@@ -87,8 +87,9 @@ public class ElasticSUtils {
         IndexResponse response = elacticSClient.index(request, RequestOptions.DEFAULT);
 
         // 判断响应结果，没有id视为失败，返回false
-        if (StringUtils.isEmpty(response.getId()))
+        if (StringUtils.isEmpty(response.getId())) {
             return false;
+        }
 
         return true;
     }
@@ -120,16 +121,16 @@ public class ElasticSUtils {
         // 遍历查询条件集合，设置查询条件
         criteriaList.forEach(criteria -> {
             QueryBuilder queryBuilder = setQueryBuilder(criteria);
-            if ("or".equals(criteria.relation())){
+            if ("or".equals(criteria.relation())) {
                 boolbuilder.should(queryBuilder); // 或：or---- TODO 按照我的考虑，“或”查询应该是有问题，有空可以测试下
             } else {
                 boolbuilder.must(queryBuilder); // 默认：且：and
             }
             // 判断为排序条件，设置排序
-            if(criteria.rule().equals(SearchRuleEnum.SORT)){
-                if("asc".equals(criteria.sort())){
+            if (criteria.rule().equals(SearchRuleEnum.SORT)) {
+                if ("asc".equals(criteria.sort())) {
                     searchSourceBuilder.sort(criteria.field(), SortOrder.ASC);// 正序
-                }else{
+                } else {
                     searchSourceBuilder.sort(criteria.field(), SortOrder.DESC);// 默认倒序
                 }
             }
@@ -143,14 +144,14 @@ public class ElasticSUtils {
         SearchHits hits = searchResponse.getHits();
 
         // 结果处理：TODO 待优化，初步思路封装为分页对象，包含：总数、页码、当前数量、结果集合
-        TotalHits total = hits.getTotalHits();
+        long totalHits = hits.getTotalHits();
         SearchHit[] hitsArr = hits.getHits();
-        if( total.value > 0 ){
+        if (totalHits > 0) {
             int num = 0;
             for (SearchHit hit : hitsArr) {
                 num++;
                 objJson.append(hit.getSourceAsString());
-                if(hitsArr.length != num){
+                if (hitsArr.length != num) {
                     objJson.append(",");
                 }
             }
@@ -162,18 +163,19 @@ public class ElasticSUtils {
     }
 
     /**
-     * @description 设置查询条件
      * @param criteria 查询条件封装实体
+     * @description 设置查询条件
      */
-    private QueryBuilder setQueryBuilder(ElasticSCriteria criteria){
+    private QueryBuilder setQueryBuilder(ElasticSCriteria criteria) {
         QueryBuilder queryBuilder = null;
         List<SearchRuleEnum> rules = criteria.rule();
         int i = 0;
-        for (SearchRuleEnum rule: rules){
+        for (SearchRuleEnum rule : rules) {
             i++;
-            sw: switch (rule){
+            sw:
+            switch (rule) {
                 case FUZZY: // 模糊查询
-                    queryBuilder = QueryBuilders.wildcardQuery(criteria.field(),"*" + criteria.info() + "*");
+                    queryBuilder = QueryBuilders.wildcardQuery(criteria.field(), "*" + criteria.info() + "*");
                     break sw;
                 case EQUAL: // 等于
                     // id只支持全等匹配
@@ -189,33 +191,33 @@ public class ElasticSUtils {
                 case SORT:
                     break sw;
                 case GREATER: // 大于
-                    if(i == 1) {
+                    if (i == 1) {
                         queryBuilder = QueryBuilders.rangeQuery(criteria.field()).gt(criteria.begin());
                     } else {
-                        ((RangeQueryBuilder)queryBuilder).gt(criteria.begin());
+                        ((RangeQueryBuilder) queryBuilder).gt(criteria.begin());
                     }
                     break sw;
                 case LESS: // 小于
-                    if(i == 1) {
+                    if (i == 1) {
                         queryBuilder = QueryBuilders.rangeQuery(criteria.field()).lt(criteria.end());
                     } else {
-                        ((RangeQueryBuilder)queryBuilder).lt(criteria.end());
+                        ((RangeQueryBuilder) queryBuilder).lt(criteria.end());
                     }
                     break sw;
                 case GREATER_E: // 大于等于
-                    if(i == 1) {
+                    if (i == 1) {
                         queryBuilder = QueryBuilders.rangeQuery(criteria.field()).gte(criteria.begin());
                     } else {
-                        ((RangeQueryBuilder)queryBuilder).gte(criteria.begin());
+                        ((RangeQueryBuilder) queryBuilder).gte(criteria.begin());
                     }
                     break sw;
                 case LESS_E: // 小于等于
-                    if(i == 1) {
+                    if (i == 1) {
                         queryBuilder = QueryBuilders.rangeQuery(criteria.field()).lte(criteria.end());
                     } else {
-                        ((RangeQueryBuilder)queryBuilder).lte(criteria.end());
+                        ((RangeQueryBuilder) queryBuilder).lte(criteria.end());
                     }
-                    break sw ;
+                    break sw;
             }
         }
 
@@ -223,8 +225,8 @@ public class ElasticSUtils {
     }
 
     /**
-     * @description 封装查询条件
      * @param queryElastic 查询条件实体
+     * @description 封装查询条件
      */
     private List<ElasticSCriteria> setCriteria(QueryElastic queryElastic) throws IllegalAccessException {
         List<ElasticSCriteria> criteriaList = new ArrayList<ElasticSCriteria>();
@@ -232,18 +234,22 @@ public class ElasticSUtils {
         Field[] Fields = queryElastic.getClass().getDeclaredFields(); // 获取全部属性
         for (Field field : Fields) {
             ElasticSCriteria criteria = new ElasticSCriteria();
-            if(!field.isAccessible()) field.setAccessible(true); // 设置属性可操作性
+            if (!field.isAccessible()) {
+                field.setAccessible(true); // 设置属性可操作性
+            }
 
             ElasticSField elasticSField = field.getAnnotation(ElasticSField.class); // 获取属性注解
-            if (elasticSField == null) continue; // 如果没用注解，跳过该属性
+            if (elasticSField == null) {
+                continue; // 如果没用注解，跳过该属性
+            }
             // 判断字段名是否手动设置
-            if(StringUtils.isEmpty(elasticSField.field())){
+            if (StringUtils.isEmpty(elasticSField.field())) {
                 criteria.field(field.getName());
             } else {
                 criteria.field(elasticSField.field());
             }
             Object info = field.get(queryElastic);
-            if(info == null){
+            if (info == null) {
                 continue;
             }
             criteria.info(info)
@@ -254,7 +260,8 @@ public class ElasticSUtils {
                     .sort(elasticSField.sort())
                     .relation(elasticSField.relation());
 
-            sw: switch (elasticSField.rule()) {
+            sw:
+            switch (elasticSField.rule()) {
                 case GREATER: // 大于和大于等于
                 case GREATER_E:
                     for (ElasticSCriteria elasticSCriteria : criteriaList) {
@@ -292,10 +299,10 @@ public class ElasticSUtils {
     }
 
     /**
-     * @description 获取实体类上的ElasticSIndex注解
      * @param queryElastic 实体类
+     * @description 获取实体类上的ElasticSIndex注解
      */
-    private ElasticSIndex getElasticSIndex(QueryElastic queryElastic){
+    private ElasticSIndex getElasticSIndex(QueryElastic queryElastic) {
         return queryElastic.getClass().getAnnotation(ElasticSIndex.class); // 获取类注解
     }
 }

@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-description('data-structure')
+description('oldmoon-eureka-7001')
 
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server:1.4.6.RELEASE'
 }

@@ -30,19 +30,29 @@ public @interface ElasticSField {
     /**
      * 查询组合，且 或，默认且 and
      */
-    String relation() default ElasticSField.And;
+    String relation() default ElasticSField.AND;
 
     /**
      * 排序，默认倒序，只有rule指定为SORT时，才会用到该值
      */
-    String sort() default ElasticSField.Desc;
+    String sort() default ElasticSField.DESC;
 
-    // 组合方式
-    String And = "and";
-    String Or = "or";
+    /**
+     * 组合方式：且
+     */
+    String AND = "and";
+    /**
+     * 组合方式：或
+     */
+    String OR = "or";
 
-    // 排序方式
-    String Asc = "asc";
-    String Desc = "desc";
+    /**
+     * 排序方式：正序
+     */
+    String ASC = "asc";
+    /**
+     * 排序方式：倒叙
+     */
+    String DESC = "desc";
 
 }
