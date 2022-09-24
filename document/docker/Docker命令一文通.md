@@ -304,7 +304,7 @@ docker run -p 8080:80 --name nginx -v /etc/nginx/nginx.conf:/usr/local/nginx/ngi
   - -d：后台启动
 - 访问端口验证
 
-![image-20220923221549221](.\images\1663942509104.jpg)
+![image-20220923221549221](./images/1663942509104.jpg)
 
 ##### rmi
 
