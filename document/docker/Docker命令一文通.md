@@ -3,7 +3,7 @@
 - [Docker命令一文通](#docker命令一文通)
   - [前言](#前言)
     - [类比Git](#类比git)
-  - [命令练习](#命令练习)
+  - [练习1：基本使用](#练习1基本使用)
     - [拉取镜像到本地](#拉取镜像到本地)
       - [search](#search)
       - [pull](#pull)
@@ -20,6 +20,14 @@
       - [restart](#restart)
       - [run：高级版](#run高级版)
       - [rmi](#rmi)
+- [分割](#分割)
+  - [练习2：搭建本地镜像仓库并上传镜像](#练习2搭建本地镜像仓库并上传镜像)
+    - [搭建本地镜像仓库](#搭建本地镜像仓库)
+      - [registry镜像](#registry镜像)
+    - [构建本地镜像](#构建本地镜像)
+    - [上传镜像至本地仓库](#上传镜像至本地仓库)
+    - [从本地仓库拉取镜像并运行](#从本地仓库拉取镜像并运行)
+- [完结撒花](#完结撒花)
 
 ### 前言
 
@@ -48,7 +56,7 @@
 
 
 
-### 命令练习
+### 练习1：基本使用
 
 > 接下来将以具体的测试实例为主线，按照命令的使用顺序一一列出并讲解。若有条件，建议学习者跟随文章一起，每个命令亲手试验，体会其作用和效果，这将会帮助你更好的理解它。
 > 
@@ -335,4 +343,251 @@ Deleted: sha256:b45078e74ec97c5e600f6d5de8ce6254094fb3cb4dc5e1cc8335fb31664af66e
 - 拓展：同样可以加参数`-f`强制删除镜像，即`docker rmi -f nginx`，但不推荐。
 
 
+
+## 分割
+
+> 如果上边的基本使用练习，你都亲自动手实践了，那么恭喜你，可以开始第二个练习了。
+>
+> 接下来会进行一个较为复杂的练习，这个练习频繁的用到了上边的一些命令，但也有新命令，继续学习吧！
+
+
+
+### 练习2：搭建本地镜像仓库并上传镜像
+
+> 本练习主要分为一下几步：
+>
+> 1. 搭建本地镜像仓库
+> 2. 构建镜像
+> 3. 上传镜像至本地仓库
+> 4. 拉取本地镜像仓库的镜像，并运行测试
+
+
+
+> 练习内容详细说明：
+>
+> 1. 本地搭建镜像仓库
+> 2. 拉取最新的官方`ubuntu`镜像，并运行，发现官方镜像中不携带`ifconfig`指令
+> 3. 在官方`ubuntu`镜像运行后的实例容器中，安装`ifconfig`指令
+> 4. 将安装了`ifconfig`指令的容器构建成一个新的镜像，名为`myubuntu`
+> 5. 将`myubuntu`镜像上传至本地搭建的镜像仓库
+> 6. 删除当前docker中，所有`ubuntu`、`myubuntu`镜像及容器
+> 7. 拉取本地镜像仓库中的`myubuntu`，并运行测试`ifconfig`指令
+
+
+
+#### 搭建本地镜像仓库
+
+##### registry镜像
+
+> 官方提供了一个名为`registry`的镜像，可以用该镜像快速搭建本地镜像仓库。
+
+- 拉取镜像
+
+```sh
+docker pull registry
+```
+
+- 启动镜像
+> `-v /var/local/docker/registry:/var/lib/registry`：将本机/var/local/docker/registry文件夹与容器/var/lib/registry做映射
+>
+> `--restart always`：重启docker时，自动启动该容器
+```sh
+docker run -d -p 5000:5000 -v /var/local/docker/registry:/var/lib/registry  --restart always --name registry registry
+```
+
+- 查看本地镜像
+
+```sh
+# 查看本地仓库，为空
+curl -XGET http://127.0.0.1:5000/v2/_catalog
+# {"repositories":[]}
+```
+
+
+
+#### 构建本地镜像
+
+- 拉取官方`ubuntu`，并运行
+
+```sh
+docker pull ubuntu
+
+docker run -d --name myubuntu ubuntu bash
+
+docker ps
+# CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS          PORTS                                           NAMES
+# 3e314b01d654   ubuntu                    "bash"                   38 seconds ago   Up 37 seconds                                                   myubuntu
+```
+
+- 安装`ifconfig`指令
+
+```sh
+# 进入刚才启动的容器
+docker exec -it 3e314b01d654 bash
+
+# 容器内安装ifconfig命令
+apt-get update
+apt-get install net-tools
+# 测试命令
+ifconfig
+# 输出
+# eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+#         inet 172.17.0.4  netmask 255.255.0.0  broadcast 172.17.255.255
+#         ether 02:42:ac:11:00:04  txqueuelen 0  (Ethernet)
+#         RX packets 3852  bytes 23648752 (23.6 MB)
+#         RX errors 0  dropped 0  overruns 0  frame 0
+#         TX packets 3623  bytes 243470 (243.4 KB)
+#         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+#
+# lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+#         inet 127.0.0.1  netmask 255.0.0.0
+#         loop  txqueuelen 1000  (Local Loopback)
+#         RX packets 0  bytes 0 (0.0 B)
+#         RX errors 0  dropped 0  overruns 0  frame 0
+#         TX packets 0  bytes 0 (0.0 B)
+#         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+# 退出容器
+exit
+```
+
+- 创建镜像
+
+```sh
+docker commit -m "add ifconfig to myubuntu" -a "ddd" 3e314b01d654 myubuntu:1.0
+
+docker images
+# 输出，可以看到刚构建的镜像
+# REPOSITORY                TAG       IMAGE ID       CREATED         SIZE
+# myubuntu                  1.0       0356315dc26d   4 seconds ago   116MB
+# ubuntu                    latest    2dc39ba059dc   3 weeks ago     77.8MB
+
+```
+
+
+
+#### 上传镜像至本地仓库
+
+- 拷贝镜像并按照官方规则命名
+
+```sh
+docker tag myubuntu:1.0 127.0.0.1:5000/myubuntu:1.0
+docker images
+# REPOSITORY                    TAG       IMAGE ID       CREATED          SIZE
+# myubuntu                      1.0       0356315dc26d   40 minutes ago   116MB
+# 127.0.0.1:5000/myubuntu       1.0       0356315dc26d   40 minutes ago   116MB
+
+```
+
+
+
+- 第一次推送，失败，增加配置，并重启docker
+
+```sh
+# 第一次尝试推送
+docker push 127.0.0.1:5000/myubuntu:1.0
+# 可能报错如下，需要配制允许上传
+# The push refers to repository [127.0.0.1:5000/myubuntu]
+# Get "https://127.0.0.1:5000/v2/": http: server gave HTTP response to HTTPS client
+
+vim /etc/docker/daemon.json
+# 注意，如果以前配置过镜像仓库加速，直接在原配置下加上("insecure-registries":["127.0.0.1:5000"])配置即可
+# 并且此处可以配多个，如："insecure-registries":["127.0.0.1:5000","192.168.0.1:5000"]
+# 若原来没有daemon.json文件，直接将以下信息填入json文件即可
+{
+  "insecure-registries":["127.0.0.1:5000"]
+}
+
+# 重启docker服务，使配置生效
+systemctl restart docker
+
+```
+
+- 第二次推送，成功，并查看仓库
+
+```sh
+# 再次推送，并成功
+docker push 127.0.0.1:5000/myubuntu:1.0
+# The push refers to repository [127.0.0.1:5000/myubuntu]
+# 25afe370111a: Pushed 
+# 7f5cbd8cc787: Pushed 
+# 1.0: digest: sha256:a64348f65424c792501aa59aa6eaa00620209e81b3055af87c7132dc17758d60 size: 741
+
+# 再次查看仓库
+curl -XGET http://127.0.0.1:5000/v2/_catalog
+{"repositories":["myubuntu"]}
+```
+
+- 检查本地文件是否同步
+
+> 注意：文件路径很长，可以分为两部分
+>
+> - 前四节`/var/local/docker/registry`，为本机文件夹。可以修改，但要与`registry`镜像启动时配置的映射路径匹配
+> - 后四节`/docker/registry/v2/repositories`是直接从本地仓库容器`registry`中同步过来的，不可修改
+
+```sh
+# 查看本机目录文件
+cd /var/local/docker/registry/docker/registry/v2/repositories
+ll
+# total 4
+# drwxr-xr-x 5 root root 4096 Sep 25 19:35 myubuntu
+pwd
+# /var/local/docker/registry/docker/registry/v2/repositories
+```
+
+
+
+#### 从本地仓库拉取镜像并运行
+
+- 删除原有全部镜像`ubuntu`
+
+```sh
+# 删除原有镜像，若有容器引用过，记得先删除容器哦，(即使容器已经停了也要先删容器再删镜像)
+docker rmi 127.0.0.1:5000/myubuntu:1.0
+docker rmi myubuntu:1.0
+docker rmi ubuntu:latest
+```
+
+- 拉取本地镜像，运行并测试
+
+```sh
+
+docker pull 127.0.0.1:5000/myubuntu:1.0
+# 1.0: Pulling from myubuntu
+# 2b55860d4c66: Pull complete 
+# b72656c01e84: Pull complete 
+# Digest: sha256:a64348f65424c792501aa59aa6eaa00620209e81b3055af87c7132dc17758d60
+# Status: Downloaded newer image for 127.0.0.1:5000/myubuntu:1.0
+# 127.0.0.1:5000/myubuntu:1.0
+
+docker run -it --name myubuntu 127.0.0.1:5000/myubuntu:1.0 bash
+# 验证命令，确定是咱们上传的容器
+ifconfig 
+# eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+#         inet 172.17.0.4  netmask 255.255.0.0  broadcast 172.17.255.255
+#         ether 02:42:ac:11:00:04  txqueuelen 0  (Ethernet)
+#         RX packets 6  bytes 516 (516.0 B)
+#         RX errors 0  dropped 0  overruns 0  frame 0
+#         TX packets 0  bytes 0 (0.0 B)
+#         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+# 
+# lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+#         inet 127.0.0.1  netmask 255.0.0.0
+#         loop  txqueuelen 1000  (Local Loopback)
+#         RX packets 0  bytes 0 (0.0 B)
+#         RX errors 0  dropped 0  overruns 0  frame 0
+#         TX packets 0  bytes 0 (0.0 B)
+#         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+# 退出容器
+exit
+```
+
+
+
+## 完结撒花
+
+> 本篇文章到此结束，以上应该是我了解的所有docker命令了，都读到这了，点个分享/Stars吧~~非常感谢！！！🤩
+>
+> PS：编程切勿纸上谈兵，一切代码都需要自己去实践和感受，才能建立自己的理解。
 
