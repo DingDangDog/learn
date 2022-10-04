@@ -1,6 +1,6 @@
-package org.github.dingdangdog.controller;
+package io.github.dingdangdog.controller;
 
-import org.github.dingdangdog.utils.FileUtilOm;
+import io.github.dingdangdog.utils.FileUtilOm;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package org.github.dingdangdog;
+package io.github.dingdangdog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

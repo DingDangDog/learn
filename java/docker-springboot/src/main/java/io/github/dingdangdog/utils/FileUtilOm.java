@@ -1,4 +1,4 @@
-package org.github.dingdangdog.utils;
+package io.github.dingdangdog.utils;
 
 import java.io.*;
 
