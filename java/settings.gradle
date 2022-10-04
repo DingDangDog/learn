@@ -8,3 +8,5 @@ include 'springcloud-rabbitmq.oldmoon-eureka-7001'
 include 'springcloud-rabbitmq.oldmoon-provider-8001'
 include 'springcloud-rabbitmq.oldmoon-provider-8002'
 include 'springcloud-rabbitmq.oldmoon-zuul-9704'
+include 'docker-springboot'
+
