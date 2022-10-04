@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.github.dingdangdog'
+group 'io.github.dingdangdog'
 version '1.0'
 
 repositories {
